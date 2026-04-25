@@ -207,6 +207,48 @@ describe('bingoLogic', () => {
       expect(result?.type).toBe('diagonal');
     });
 
+    it('should detect four corners as a bingo', () => {
+      const board = generateBoard();
+      [0, 4, 20, 24].forEach((i) => {
+        board[i].isMarked = true;
+      });
+
+      const result = checkBingo(board);
+      expect(result).not.toBeNull();
+      expect(result?.type).toBe('fourCorners');
+      expect(result?.squares).toEqual([0, 4, 20, 24]);
+    });
+
+    it('should win with Four Corners when all four corners are marked', () => {
+      const board = generateBoard();
+      [0, 4, 20, 24].forEach((i) => {
+        board[i].isMarked = true;
+      });
+
+      const result = checkBingo(board);
+      expect(result).not.toBeNull();
+      expect(result?.type).toBe('fourCorners');
+      expect(result?.squares).toEqual([0, 4, 20, 24]);
+    });
+
+    it('should return null when only three corners are marked', () => {
+      const board = generateBoard();
+      [0, 4, 20].forEach((i) => {
+        board[i].isMarked = true;
+      });
+
+      expect(checkBingo(board)).toBeNull();
+    });
+
+    it('should not win Four Corners if any one corner is unmarked', () => {
+      const board = generateBoard();
+      [0, 4, 24].forEach((i) => {
+        board[i].isMarked = true;
+      });
+
+      expect(checkBingo(board)).toBeNull();
+    });
+
     it('should work with free space in center', () => {
       const board = generateBoard();
       [10, 11, 12, 13, 14].forEach((i) => {
