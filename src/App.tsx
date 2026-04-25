@@ -1,9 +1,17 @@
+import { useCallback, useState } from 'react';
 import { useBingoGame } from './hooks/useBingoGame';
 import { StartScreen } from './components/StartScreen';
 import { GameScreen } from './components/GameScreen';
 import { BingoModal } from './components/BingoModal';
+import { CardDeckScreen } from './components/CardDeckScreen';
+import { questions } from './data/questions';
+
+type AppMode = 'menu' | 'bingo' | 'deck';
 
 function App() {
+  const [appMode, setAppMode] = useState<AppMode>('menu');
+  const [currentDeckQuestion, setCurrentDeckQuestion] = useState<string | null>(null);
+
   const {
     gameState,
     board,
@@ -15,8 +23,59 @@ function App() {
     dismissModal,
   } = useBingoGame();
 
-  if (gameState === 'start') {
-    return <StartScreen onStart={startGame} />;
+  const drawDeckQuestion = useCallback(() => {
+    if (questions.length === 0) {
+      setCurrentDeckQuestion(null);
+      return;
+    }
+
+    setCurrentDeckQuestion((current) => {
+      if (questions.length === 1) {
+        return questions[0];
+      }
+
+      let next = current;
+      while (next === current) {
+        next = questions[Math.floor(Math.random() * questions.length)];
+      }
+
+      return next;
+    });
+  }, []);
+
+  const startBingoMode = useCallback(() => {
+    setAppMode('bingo');
+    startGame();
+  }, [startGame]);
+
+  const startDeckMode = useCallback(() => {
+    setCurrentDeckQuestion(null);
+    setAppMode('deck');
+  }, []);
+
+  const goToMenu = useCallback(() => {
+    resetGame();
+    setCurrentDeckQuestion(null);
+    setAppMode('menu');
+  }, [resetGame]);
+
+  if (appMode === 'menu') {
+    return (
+      <StartScreen
+        onStartBingo={startBingoMode}
+        onStartDeckShuffle={startDeckMode}
+      />
+    );
+  }
+
+  if (appMode === 'deck') {
+    return (
+      <CardDeckScreen
+        currentQuestion={currentDeckQuestion}
+        onDraw={drawDeckQuestion}
+        onBack={goToMenu}
+      />
+    );
   }
 
   return (
@@ -26,7 +85,7 @@ function App() {
         winningSquareIds={winningSquareIds}
         hasBingo={gameState === 'bingo'}
         onSquareClick={handleSquareClick}
-        onReset={resetGame}
+        onReset={goToMenu}
       />
       {showBingoModal && (
         <BingoModal onDismiss={dismissModal} />

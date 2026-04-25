@@ -1,8 +1,9 @@
 interface StartScreenProps {
-  onStart: () => void;
+  onStartBingo: () => void;
+  onStartDeckShuffle: () => void;
 }
 
-export function StartScreen({ onStart }: StartScreenProps) {
+export function StartScreen({ onStartBingo, onStartDeckShuffle }: StartScreenProps) {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-full p-6"
@@ -58,13 +59,21 @@ export function StartScreen({ onStart }: StartScreenProps) {
         </div>
 
         {/* CTA */}
-        <button
-          onClick={onStart}
-          className="w-full bg-accent hover:bg-accent-hover text-surface-card font-semibold py-4 px-8 rounded-xl text-base transition-all duration-200 active:scale-[0.97]"
-          style={{ boxShadow: '0 4px 20px rgba(181,100,28,0.32)' }}
-        >
-          Start the Game
-        </button>
+        <div className="space-y-3">
+          <button
+            onClick={onStartBingo}
+            className="w-full bg-accent hover:bg-accent-hover text-surface-card font-semibold py-4 px-8 rounded-xl text-base transition-all duration-200 active:scale-[0.97]"
+            style={{ boxShadow: '0 4px 20px rgba(181,100,28,0.32)' }}
+          >
+            Play Classic Bingo
+          </button>
+          <button
+            onClick={onStartDeckShuffle}
+            className="w-full bg-surface-raised hover:bg-surface-inset text-ink font-semibold py-4 px-8 rounded-xl text-base transition-all duration-200 active:scale-[0.97] border border-surface-inset"
+          >
+            Card Deck Shuffle
+          </button>
+        </div>
       </div>
     </div>
   );
