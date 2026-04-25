@@ -1,11 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
 @import 'tailwindcss';
 
 @theme {
-  --color-accent: #2563eb;
-  --color-accent-light: #3b82f6;
-  --color-marked: #dcfce7;
-  --color-marked-border: #22c55e;
-  --color-bingo: #fbbf24;
+  /* Surfaces — warm parchment scale */
+  --color-surface: #F8F2E8;
+  --color-surface-card: #FFFCF5;
+  --color-surface-raised: #FFF8EE;
+  --color-surface-inset: #EDE0CB;
+
+  /* Ink — espresso brown scale */
+  --color-ink: #1E0E08;
+  --color-ink-mid: #6B4030;
+  --color-ink-soft: #9C7060;
+  --color-ink-faint: #D4C0B4;
+
+  /* Accent — caramel / burnt sienna */
+  --color-accent: #B5641C;
+  --color-accent-hover: #CF7C30;
+  --color-accent-dim: #F5E6D0;
+
+  /* Marked — muted sage */
+  --color-marked: #E2EEE0;
+  --color-marked-border: #5C9450;
+  --color-marked-text: #2A5225;
+
+  /* Winning — golden amber */
+  --color-bingo: #C8840A;
+  --color-bingo-bg: #FEF7E2;
+
+  /* Typography */
+  --font-display: 'Playfair Display', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-body: 'DM Sans', Optima, Candara, system-ui, sans-serif;
 }
 
 html,
@@ -16,6 +42,19 @@ body,
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   -webkit-tap-highlight-color: transparent;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }

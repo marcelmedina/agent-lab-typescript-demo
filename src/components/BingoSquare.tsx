@@ -7,28 +7,48 @@ interface BingoSquareProps {
 }
 
 export function BingoSquare({ square, isWinning, onClick }: BingoSquareProps) {
-  const baseClasses =
-    'relative flex items-center justify-center p-1 text-center border border-gray-300 rounded transition-all duration-150 select-none min-h-[60px] text-xs leading-tight';
+  const { isMarked, isFreeSpace, text } = square;
 
-  const stateClasses = square.isMarked
-    ? isWinning
-      ? 'bg-amber-200 border-amber-400 text-amber-900'
-      : 'bg-marked border-marked-border text-green-800'
-    : 'bg-white text-gray-700 active:bg-gray-100';
-
-  const freeSpaceClasses = square.isFreeSpace ? 'font-bold text-sm' : '';
+  let stateClasses: string;
+  if (isFreeSpace) {
+    stateClasses = 'bg-accent-dim border-accent/25 cursor-default';
+  } else if (isMarked && isWinning) {
+    stateClasses = 'bg-bingo-bg border-bingo text-ink font-medium shadow-[0_0_0_2px_var(--color-bingo)]';
+  } else if (isMarked) {
+    stateClasses = 'bg-marked border-marked-border text-marked-text';
+  } else {
+    stateClasses =
+      'bg-surface-card border-surface-inset text-ink-mid ' +
+      'hover:bg-surface-raised hover:border-ink-faint hover:shadow-xs ' +
+      'active:bg-surface-inset active:scale-[0.97]';
+  }
 
   return (
     <button
       onClick={onClick}
-      disabled={square.isFreeSpace}
-      className={`${baseClasses} ${stateClasses} ${freeSpaceClasses}`}
-      aria-pressed={square.isMarked}
-      aria-label={square.isFreeSpace ? 'Free space' : square.text}
+      disabled={isFreeSpace}
+      className={`relative flex items-center justify-center p-1.5 text-center border rounded-lg transition-all duration-150 select-none min-h-[60px] text-xs leading-tight ${stateClasses}`}
+      aria-pressed={isMarked}
+      aria-label={isFreeSpace ? 'Free space' : text}
     >
-      <span className="wrap-break-word hyphens-auto">{square.text}</span>
-      {square.isMarked && !square.isFreeSpace && (
-        <span className="absolute top-0.5 right-0.5 text-green-600 text-xs">✓</span>
+      {isFreeSpace ? (
+        <span className="font-display font-bold text-accent text-[11px] tracking-wide leading-snug">
+          ☕
+          <br />
+          FREE
+        </span>
+      ) : (
+        <>
+          <span className="break-words hyphens-auto">{text}</span>
+          {isMarked && (
+            <span
+              className="absolute top-0.5 right-0.5 text-marked-text text-[10px] leading-none"
+              aria-hidden
+            >
+              ✓
+            </span>
+          )}
+        </>
       )}
     </button>
   );
