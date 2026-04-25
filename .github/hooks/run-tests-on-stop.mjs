@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 
-const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
-const result = spawnSync(npmCommand, ["run", "test", "--", "--run"], {
+const result = spawnSync("npm run test -- --run", {
+  shell: true,
   stdio: "inherit",
 });
 
